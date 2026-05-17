@@ -1,0 +1,51 @@
+diff --git a/src/seg009.c b/src/seg009.c
+index a6c496e..dd541c4 100644
+--- a/src/seg009.c
++++ b/src/seg009.c
+@@ -951,6 +951,15 @@ void draw_image_transp(image_type* image,image_type* mask,int xpos,int ypos) {
+ 
+ // seg009:157E
+ int set_joy_mode() {
++#ifdef SDLPOP_ANDROID_TOUCH_ONLY
++	is_joyst_mode = 0;
++	is_keyboard_mode = 1;
++	using_sdl_joystick_interface = 0;
++	sdl_controller_ = NULL;
++	sdl_joystick_ = NULL;
++	sdl_haptic = NULL;
++	return 0;
++#else
+ 	// stub
+ 	if (SDL_NumJoysticks() < 1) {
+ 		is_joyst_mode = 0;
+@@ -984,6 +993,7 @@ int set_joy_mode() {
+ 
+ 	is_keyboard_mode = !is_joyst_mode;
+ 	return is_joyst_mode;
++#endif
+ }
+ 
+ // seg009:178B
+@@ -2560,15 +2570,21 @@ void set_gr_mode(byte grmode) {
+ #ifdef SDL_HINT_WINDOWS_DISABLE_THREAD_NAMING
+ 	SDL_SetHint(SDL_HINT_WINDOWS_DISABLE_THREAD_NAMING, "1");
+ #endif
+-	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_NOPARACHUTE | SDL_INIT_GAMECONTROLLER) != 0) {
++	Uint32 sdl_init_flags = SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_NOPARACHUTE;
++#ifndef SDLPOP_ANDROID_TOUCH_ONLY
++	sdl_init_flags |= SDL_INIT_GAMECONTROLLER;
++#endif
++	if (SDL_Init(sdl_init_flags) != 0) {
+ 		sdlperror("set_gr_mode: SDL_Init");
+ 		quit(1);
+ 	}
++#ifndef SDLPOP_ANDROID_TOUCH_ONLY
+ 	if (enable_controller_rumble) {
+ 		if (SDL_InitSubSystem(SDL_INIT_HAPTIC) != 0) {
+ 			printf("Warning: Haptic subsystem unavailable, ignoring enable_controller_rumble = true\n");
+ 		}
+ 	}
++#endif
+ 
+ 	//SDL_EnableUNICODE(1); //deprecated
+ 	Uint32 flags = 0;

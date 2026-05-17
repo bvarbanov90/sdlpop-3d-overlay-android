@@ -1,0 +1,18 @@
+.gradle/
+build/
+app/build/
+app/.cxx/
+local.properties
+*.iml
+.idea/
+
+# Upstream dependencies are fetched by Gradle, not committed here.
+external/SDLPoP/
+external/SDL2/
+external/SDL2_image/
+
+# Local emulator/test screenshots.
+/control-*.png
+/native-sdlpop-*.png
+/phone-lock-fix-*.png
+/sdlpop-*.png

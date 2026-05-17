@@ -1,0 +1,14 @@
+This project is an unofficial proof-of-concept Android wrapper, touch layer,
+and transparent 3D overlay for SDLPoP.
+
+This repository does not vendor SDLPoP. The Gradle build fetches the upstream
+source from the pinned repository/ref in gradle.properties and applies the
+Android patch in patches/.
+
+SDLPoP:
+  Repository: https://github.com/NagyD/SDLPoP
+  License: GPLv3, copied into the APK assets by the Gradle build.
+
+The Android wrapper and touch overlay code in this directory should be treated
+as GPLv3-compatible if distributed together with SDLPoP code or data. The root
+LICENSE file contains the GPLv3 text for repository publication.
